@@ -45,7 +45,7 @@ export default class TaskListView extends Component<{}> {
 
   renderDone = (item) => {
 
-    if (item.complete) {
+    if (!item.complete) {
       return null;
     }
 
@@ -64,7 +64,8 @@ export default class TaskListView extends Component<{}> {
     const item = row.item;
 
     return (
-      <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} onPress={() => {
+      <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} onPress={() =>
+      {
         TaskStore.edit(item.id, { complete: !item.complete });
       }} >
         <View style={{ flex: 1, flexDirection: 'row' }} >
