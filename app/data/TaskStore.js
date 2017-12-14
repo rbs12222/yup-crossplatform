@@ -28,6 +28,7 @@ class TaskStore {
   @action
   all() {
     try {
+      this.list = [];
       const value =
         AsyncStorage.getItem('tasks');
       if (value !== null) {
@@ -35,8 +36,12 @@ class TaskStore {
         value.then((result) => {
           // console.log(result);
           this.list = JSON.parse(result);
+          if (!this.list) this.list = [];
           this.listIsUpdateIn += 1;
         }).catch(error => alert(error));
+      } else {
+        this.list = [];
+        this.listIsUpdateIn += 1;
       }
     } catch (error) {
       // Error retrieving data
