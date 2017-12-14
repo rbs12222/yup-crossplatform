@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import MD5 from './Crypt.js';
+import MD5 from './Crypt';
 
 const {
   computed,
@@ -61,18 +61,22 @@ class TaskStore {
   edit(id, data) {
     this.list.forEach((item) => {
       if (item.id === id) {
-        item.name = data.name;
-        item.description = data.description;
-        item.complete = data.complete;
 
-        try {
-          AsyncStorage.setItem('tasks', JSON.stringify(this.list));
-        } catch (error) {
-          alert(error);
-          return;
-        }
+        Object.keys(data).forEach((key) => {
+          if (data[key] !== null && data[key] !== undefined) {
+            item[key] = data[key];
+          }
+        });
+        this.listIsUpdateIn += 1;
       }
-    })
+    });
+
+    try {
+      AsyncStorage.setItem('tasks', JSON.stringify(this.list));
+    } catch (error) {
+      alert(error);
+      return;
+    }
   }
 
 }
