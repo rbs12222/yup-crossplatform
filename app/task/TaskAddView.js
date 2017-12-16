@@ -28,12 +28,12 @@ export default class TaskAddView extends Component<{}> {
     super(props);
     this.leftButtonConfig = {
       title: 'Back',
-      tintColor: 'white',
+      tintColor: 'black',
       handler: () => this.props.onBack(),
     };
     this.rightButtonConfig = {
       title: 'Save',
-      tintColor: 'white',
+      tintColor: 'black',
       handler: () => {
         this.onSave();
         this.props.onBack();
@@ -42,7 +42,7 @@ export default class TaskAddView extends Component<{}> {
 
     this.titleConfig = {
       title: 'Add Task',
-      tintColor: 'white',
+      tintColor: '#299176',
     };
 
     this.state = {
@@ -82,7 +82,7 @@ export default class TaskAddView extends Component<{}> {
     return (
       <View style={styles.container} >
         <NavigationBar
-          tintColor={'purple'}
+          tintColor={'white'}
           title={this.titleConfig}
           leftButton={this.leftButtonConfig}
           rightButton={this.rightButtonConfig}
@@ -128,7 +128,7 @@ export default class TaskAddView extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
   welcome: {
     fontSize: 20,

@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
+import Drawer from 'react-native-drawer'
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import NavigationStore from './data/NavigationStore';
 
 import TaskAddView from './task/TaskAddView';
 import TaskEditView from './task/TaskEditView';
 import TaskListView from './task/TaskListView';
+
+const { width, height } = Dimensions.get('window');
 
 export default class Home extends Component {
 
@@ -48,13 +54,41 @@ export default class Home extends Component {
             NavigationStore.showAdd();
             this.forceUpdate();
           }}
-          onEdit={() => {
-            NavigationStore.showEdit();
-            this.forceUpdate();
+          onMenu={() => {
+            // NavigationStore.showEdit();
+            // this.forceUpdate();
+            this._drawer.open();
           }}
         />)
     }
     return null;
+  }
+
+  renderSidebar = () => {
+    return (
+      <View style={{ flex: 1, paddingTop: 50, backgroundColor: '#219176' }} >
+
+        <View>
+
+          <Icon.Button name="list" backgroundColor="transparent" onPress={() => {}}>
+            To-do list
+          </Icon.Button>
+        </View>
+        <View>
+
+          <Icon.Button name="settings" backgroundColor="transparent" onPress={() => {}}>
+            Settings
+          </Icon.Button>
+        </View>
+        <View>
+
+          <Icon.Button name="help" backgroundColor="transparent" onPress={() => {}}>
+            About
+          </Icon.Button>
+        </View>
+
+      </View>
+    )
   }
 
   render() {
@@ -64,11 +98,18 @@ export default class Home extends Component {
     NavigationStore.ShowTask;
 
     return (
-      <View style={{ flex: 1 }} >
-        {this.renderAdd()}
-        {this.renderEdit()}
-        {this.renderTask()}
-      </View>
+      <Drawer
+        ref={(ref) => this._drawer = ref}
+        content={this.renderSidebar()}
+        openDrawerOffset={width / 2}
+        tapToClose
+        side={'right'}
+      >
+        <View style={{ flex: 1 }} >
+          {this.renderAdd()}
+          {this.renderTask()}
+        </View>
+      </Drawer>
     );
 
   }

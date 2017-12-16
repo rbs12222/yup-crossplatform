@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { observer } from 'mobx-react';
 import NavigationBar from 'react-native-navbar';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Button from 'react-native-button';
 
 import TaskStore from '../data/TaskStore';
 import NavigationStore from '../data/NavigationStore';
@@ -26,16 +28,9 @@ export default class TaskListView extends Component<{}> {
 
   constructor(props) {
     super(props);
-
-    this.rightButtonConfig = {
-      title: 'Add',
-      tintColor: 'white',
-      handler: () => this.props.onAdd(),
-    };
-
     this.titleConfig = {
-      title: 'Tasks',
-      tintColor: 'white',
+      title: 'Yup!',
+      tintColor: '#299176',
     };
   }
 
@@ -50,10 +45,13 @@ export default class TaskListView extends Component<{}> {
     }
 
     return (
-      <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 10,
+      <View style={{
+        flex: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 10,
         borderBottomColor: '#dddddd',
-        borderBottomWidth: StyleSheet.hairlineWidth, }} >
-        <Text>Done</Text>
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        paddingHorizontal: 10,
+      }} >
+        <Icon name="check" size={20} color="blue" />
       </View>
     )
   }
@@ -64,8 +62,7 @@ export default class TaskListView extends Component<{}> {
     const item = row.item;
 
     return (
-      <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} onPress={() =>
-      {
+      <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} onPress={() => {
         TaskStore.edit(item.id, { complete: !item.complete });
       }} >
         <View style={{ flex: 1, flexDirection: 'row' }} >
@@ -74,7 +71,23 @@ export default class TaskListView extends Component<{}> {
             paddingVertical: 15,
             borderBottomColor: '#dddddd',
             borderBottomWidth: StyleSheet.hairlineWidth,
+            flexDirection: 'row',
+            // justifyContent: 'center',
+            alignItems: 'center',
           }} >
+            <Button
+              containerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 5,
+                backgroundColor: '#219176',
+                borderRadius: 15,
+                marginHorizontal: 10,
+              }}
+              onPress={() => this.props.onAdd()}
+            >
+              <Icon name="add" size={15} color="white" />
+            </Button>
             <Text> {item.name} </Text>
           </View>
           {this.renderDone(item)}
@@ -105,12 +118,26 @@ export default class TaskListView extends Component<{}> {
   render() {
     if (TaskStore.ListIsUpdate);
 
+    const icon = (
+      <Button
+        containerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingRight: 10
+        }}
+        onPress={this.props.onMenu}
+      >
+        <Icon name="menu"
+              size={25}
+              color="#299176" />
+      </Button>);
     return (
       <View style={styles.container} >
         <NavigationBar
-          tintColor={'purple'}
+          tintColor={'white'}
           title={this.titleConfig}
-          rightButton={this.rightButtonConfig}
+          // rightButton={this.rightButtonConfig}
+          rightButton={icon}
         />
         {this.renderView()}
       </View>
@@ -121,7 +148,7 @@ export default class TaskListView extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
   welcome: {
     fontSize: 20,
