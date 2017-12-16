@@ -96,6 +96,36 @@ export default class TaskListView extends Component<{}> {
     )
   }
 
+  renderHeader = () => {
+    return (
+      <View style={{ flex: 1, flexDirection: 'row' }} >
+        <View style={{
+          flex: 1,
+          paddingVertical: 15,
+          borderBottomColor: '#dddddd',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          flexDirection: 'row',
+          // justifyContent: 'center',
+          alignItems: 'center',
+        }} >
+          <Button
+            containerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 5,
+              backgroundColor: '#219176',
+              borderRadius: 15,
+              marginHorizontal: 10,
+            }}
+            onPress={() => this.props.onAdd()}
+          >
+            <Icon name="add" size={15} color="white" />
+          </Button>
+        </View>
+      </View>
+    )
+  }
+
   renderView = () => {
     return (
       <FlatList
@@ -107,6 +137,7 @@ export default class TaskListView extends Component<{}> {
         data={TaskStore.ListData}
         renderItem={this.renderRow}
         keyExtractor={this.keyExtractor}
+        ListHeaderComponent={this.renderHeader()}
         extraData={TaskStore.ListIsUpdate}
         // onRefresh={this.onRefresh}
         // refreshing={this.refreshing}
