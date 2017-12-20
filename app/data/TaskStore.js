@@ -12,6 +12,7 @@ class TaskStore {
   list = [];
   @observable
   listIsUpdateIn = 0;
+  currentItem = null;
 
   @computed
   get ListIsUpdate() {
@@ -82,6 +83,21 @@ class TaskStore {
       alert(error);
       return;
     }
+  }
+
+  @action
+  remove(item) {
+    if (!item) return;
+    const id = item.id;
+    try {
+      this.list = this.list.filter((l) => l.id !== item.id);
+      AsyncStorage.setItem('tasks', JSON.stringify(this.list));
+      this.listIsUpdateIn += 1;
+    } catch (error) {
+      alert(error);
+      return;
+    }
+
   }
 
 }

@@ -14,14 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 
 import TaskStore from '../data/TaskStore';
-import NavigationStore from '../data/NavigationStore';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-  'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-  'Shake or press menu button for dev menu',
-});
 
 @observer
 export default class TaskListView extends Component<{}> {
@@ -84,9 +77,12 @@ export default class TaskListView extends Component<{}> {
                 borderRadius: 15,
                 marginHorizontal: 10,
               }}
-              onPress={() => this.props.onAdd()}
+              onPress={() => {
+                TaskStore.currentItem = item;
+                this.props.onEdit();
+              }}
             >
-              <Icon name="add" size={15} color="white" />
+              <Icon name="edit" size={15} color="white" />
             </Button>
             <Text> {item.name} </Text>
           </View>
