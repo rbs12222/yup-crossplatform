@@ -84,7 +84,10 @@ export default class TaskListView extends Component<{}> {
             >
               <Icon name="edit" size={15} color="white" />
             </Button>
-            <Text> {item.name} </Text>
+            <View style={{ flex: 1 }} >
+              <Text style={{ fontSize: 17 }} > {item.name} </Text>
+              <Text style={{ fontSize: 12, color: 'gray' }} >{item.description} </Text>
+            </View>
           </View>
           {this.renderDone(item)}
         </View>

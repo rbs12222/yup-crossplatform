@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 
+import Button from 'react-native-button';
 import NavigationBar from 'react-native-navbar';
 
 import TaskStore from '../data/TaskStore';
@@ -48,6 +49,7 @@ export default class TaskAddView extends Component<{}> {
     this.state = {
       name: '',
       description: '',
+      due: '2017/07/20',
     }
   }
 
@@ -117,6 +119,27 @@ export default class TaskAddView extends Component<{}> {
               placeholder={'description'}
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
+          </View>
+          <View style={{
+            padding: 5,
+            margin: 10,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }} >
+            <TextInput
+              value={this.state.due}
+              style={{ flex: 1, color: 'black' }}
+              onChangeText={(value) => {
+                this.setState({
+                  description: value,
+                });
+              }}
+              editable={false}
+              placeholder={'2017/07/20'}
+              underlineColorAndroid={'rgba(0,0,0,0)'}
+            />
+            <Button>Choose Due Date</Button>
           </View>
         </ScrollView>
 
