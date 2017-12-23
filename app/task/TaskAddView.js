@@ -12,28 +12,31 @@ import {
   DatePickerIOS,
 } from 'react-native';
 
-import Button from 'react-native-button';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
+import Button from 'react-native-button';
 
 import TaskStore from '../data/TaskStore';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-  'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-  'Shake or press menu button for dev menu',
-});
-
 
 export default class TaskAddView extends Component<{}> {
 
   constructor(props) {
     super(props);
-    this.leftButtonConfig = {
-      title: 'Back',
-      tintColor: 'black',
-      handler: () => this.props.onBack(),
-    };
+
+    this.leftButtonConfig = (
+      <Button
+        containerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 5,
+          // borderRadius: 15,
+          marginHorizontal: 5,
+        }}
+        onPress={() => this.props.onBack()}
+      >
+        <Icon name="arrow-back" size={25} color='#219176' />
+      </Button>
+    );
     this.rightButtonConfig = {
       title: 'Save',
       tintColor: 'black',
