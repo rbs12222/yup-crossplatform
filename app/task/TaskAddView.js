@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  DatePickerAndroid,
+  DatePickerIOS,
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -80,6 +82,19 @@ export default class TaskAddView extends Component<{}> {
     )
   }
 
+  renderDatePicker = () => {
+    if (Platform.OS === 'ios') {
+      return (
+        <DatePickerIOS
+          date={new Date(Date.now())}
+          mode={'datetime'}
+          onDateChange={(time) => {
+          }}
+        />
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.container} >
@@ -122,24 +137,8 @@ export default class TaskAddView extends Component<{}> {
           </View>
           <View style={{
             padding: 5,
-            margin: 10,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center'
           }} >
-            <TextInput
-              value={this.state.due}
-              style={{ flex: 1, color: 'black' }}
-              onChangeText={(value) => {
-                this.setState({
-                  description: value,
-                });
-              }}
-              editable={false}
-              placeholder={'2017/07/20'}
-              underlineColorAndroid={'rgba(0,0,0,0)'}
-            />
-            <Button>Choose Due Date</Button>
+            {this.renderDatePicker()}
           </View>
         </ScrollView>
 
