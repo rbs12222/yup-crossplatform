@@ -8,6 +8,8 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  DatePickerIOS,
+  DatePickerAndroid,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -74,6 +76,20 @@ export default class TaskEditView extends Component<{}> {
     });
   }
 
+  renderDatePicker = () => {
+    if (Platform.OS === 'ios') {
+      return (
+        <DatePickerIOS
+          date={new Date(Date.now())}
+          mode={'datetime'}
+          onDateChange={(time) => {
+          }}
+        />
+      );
+    }
+  }
+
+
   render() {
     return (
       <View style={styles.container} >
@@ -109,6 +125,11 @@ export default class TaskEditView extends Component<{}> {
               placeholder={'description'}
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
+          </View>
+          <View style={{
+            padding: 5,
+          }} >
+            {this.renderDatePicker()}
           </View>
           <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
             <Button onPress={this.onDelete}>Delete</Button>
