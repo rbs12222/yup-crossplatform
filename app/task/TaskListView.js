@@ -163,12 +163,6 @@ export default class TaskListView extends Component<{}> {
       </Button>);
     return (
       <View style={styles.container} >
-        <NavigationBar
-          tintColor={'white'}
-          title={this.titleConfig}
-          // rightButton={this.rightButtonConfig}
-          rightButton={icon}
-        />
         {this.renderView()}
       </View>
     );
