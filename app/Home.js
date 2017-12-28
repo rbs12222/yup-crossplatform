@@ -15,6 +15,10 @@ import TaskAddView from './task/TaskAddView';
 import TaskEditView from './task/TaskEditView';
 import TaskListView from './task/TaskListView';
 
+import NoteAddView from './note/NoteAddView';
+import NoteEditView from './note/NoteEditView';
+import NoteListView from './note/NoteListView';
+
 const { width, height } = Dimensions.get('window');
 
 const initialLayout = {
@@ -26,19 +30,34 @@ const FirstRoute = () => (
   <TaskListView
     onAdd={() => {
       // alert('hi');
-      NavigationStore.showAdd();
+      NavigationStore.showTaskAdd();
     }}
     onEdit={() => {
       // alert('hi');
-      NavigationStore.showEdit();
+      NavigationStore.showTaskEdit();
     }}
     onMenu={() => {
-      // NavigationStore.showEdit();
+      // NavigationStore.showTaskEdit();
       // this.forceUpdate();
       this._drawer.open();
     }}
   />);
-const SecondRoute = () => <View style={{ backgroundColor: '#673ab7' }} />;
+const SecondRoute = () => (
+  <NoteListView
+    onAdd={() => {
+      // alert('hi');
+      NavigationStore.showNoteAdd();
+    }}
+    onEdit={() => {
+      // alert('hi');
+      NavigationStore.showNoteEdit();
+    }}
+    onMenu={() => {
+      // NavigationStore.showTaskEdit();
+      // this.forceUpdate();
+      this._drawer.open();
+    }}
+  />);
 
 @observer
 export default class Home extends Component {
@@ -49,7 +68,7 @@ export default class Home extends Component {
       index: 0,
       routes: [
         { key: 'first', title: 'Todo' },
-        { key: 'second', title: 'Categories' },
+        { key: 'second', title: 'Notes' },
       ],
     };
 
@@ -61,7 +80,7 @@ export default class Home extends Component {
 
   _handleIndexChange = index => this.setState({ index });
 
-  _renderHeader = props => <TabBar {...props} style={{ backgroundColor: 'white' }} labelStyle={{ color: 'black' }} />;
+  _renderHeader = props => <TabBar {...props} style={{ backgroundColor: 'white'}} labelStyle={{ color: 'black' }} />;
 
   _renderScene = SceneMap({
     first: FirstRoute,
@@ -69,11 +88,21 @@ export default class Home extends Component {
   });
 
   renderAdd = () => {
-    if (NavigationStore.ShowAdd) {
+    if (NavigationStore.ShowTaskAdd) {
       return (
         <TaskAddView onBack={() => {
           // alert('hi');
-          NavigationStore.showTask();
+          NavigationStore.showTaskList();
+          this.forceUpdate();
+        }}
+        />)
+    }
+
+    if (NavigationStore.ShowNoteAdd) {
+      return (
+        <NoteAddView onBack={() => {
+          // alert('hi');
+          NavigationStore.showNoteList();
           this.forceUpdate();
         }}
         />)
@@ -83,37 +112,23 @@ export default class Home extends Component {
   }
 
   renderEdit = () => {
-    if (NavigationStore.ShowEdit) {
+    if (NavigationStore.ShowTaskEdit) {
       return (
         <TaskEditView onBack={() => {
           // alert('hi');
-          NavigationStore.showTask();
+          NavigationStore.showTaskList();
           this.forceUpdate();
         }}
         />)
     }
-    return null;
-  }
 
-  renderTask = () => {
-    if (NavigationStore.ShowTask) {
+    if (NavigationStore.ShowNoteEdit) {
       return (
-        <TaskListView
-          onAdd={() => {
-            // alert('hi');
-            NavigationStore.showAdd();
-            this.forceUpdate();
-          }}
-          onEdit={() => {
-            // alert('hi');
-            NavigationStore.showEdit();
-            this.forceUpdate();
-          }}
-          onMenu={() => {
-            // NavigationStore.showEdit();
-            // this.forceUpdate();
-            this._drawer.open();
-          }}
+        <NoteEditView onBack={() => {
+          // alert('hi');
+          NavigationStore.showNoteList();
+          this.forceUpdate();
+        }}
         />)
     }
     return null;
@@ -164,7 +179,7 @@ export default class Home extends Component {
               color="#299176" />
       </Button>);
 
-    if (NavigationStore.ShowTask) {
+    if (NavigationStore.ShowTaskList || NavigationStore.ShowNoteList) {
       return (
         <View style={{ flex: 1 }} >
           <NavigationBar
@@ -190,9 +205,9 @@ export default class Home extends Component {
 
   render() {
 
-    NavigationStore.ShowAdd;
-    NavigationStore.ShowEdit;
-    NavigationStore.ShowTask;
+    NavigationStore.ShowTaskAdd;
+    NavigationStore.ShowTaskEdit;
+    NavigationStore.ShowTaskList;
 
     return (
       <Drawer
