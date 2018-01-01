@@ -16,9 +16,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 import Button from 'react-native-button';
 
-import TaskStore from '../data/TaskStore';
+import NoteStore from '../data/NoteStore';
 
-export default class TaskEditView extends Component<{}> {
+export default class NoteEditView extends Component<{}> {
 
   constructor(props) {
     super(props);
@@ -47,29 +47,26 @@ export default class TaskEditView extends Component<{}> {
     };
 
     this.titleConfig = {
-      title: 'Edit Task',
+      title: 'Edit Note',
       tintColor: '#299176',
     };
 
     this.state = {
-      name: TaskStore.currentItem.name,
-      description: TaskStore.currentItem.description,
-      due: new Date(TaskStore.currentItem.due),
+      name: NoteStore.currentItem.name,
+      description: NoteStore.currentItem.description,
     }
   }
 
   onSave = () => {
-    const date = this.state.due;
-    TaskStore.edit(TaskStore.currentItem.id, {
+    NoteStore.edit(NoteStore.currentItem.id, {
       name: this.state.name,
       description: this.state.description,
-      due: Date.parse(date.toLocaleString()),
     });
     this.props.onBack();
   }
 
   onDelete = () => {
-    TaskStore.remove(TaskStore.currentItem);
+    NoteStore.remove(NoteStore.currentItem);
     this.props.onBack();
   }
 
@@ -78,23 +75,6 @@ export default class TaskEditView extends Component<{}> {
       [key]: value,
     });
   }
-
-  renderDatePicker = () => {
-    if (Platform.OS === 'ios') {
-      return (
-        <DatePickerIOS
-          date={this.state.due}
-          mode={'datetime'}
-          onDateChange={(time) => {
-            this.setState({
-              due: time,
-            })
-          }}
-        />
-      );
-    }
-  }
-
 
   render() {
     return (
@@ -128,14 +108,9 @@ export default class TaskEditView extends Component<{}> {
               onChangeText={(value) => {
                 this.onChangeText('description', value);
               }}
-              placeholder={'description'}
+              placeholder={'content'}
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
-          </View>
-          <View style={{
-            padding: 5,
-          }} >
-            {this.renderDatePicker()}
           </View>
           <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
             <Button onPress={this.onDelete}>Delete</Button>

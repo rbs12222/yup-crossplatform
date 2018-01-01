@@ -5,23 +5,24 @@ import {
   Text,
   View,
   FlatList,
-  ScrollView,
-  TextInput,
   TouchableOpacity,
-  DatePickerIOS,
+  TextInput,
+  ScrollView,
   DatePickerAndroid,
+  DatePickerIOS,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 import Button from 'react-native-button';
 
-import TaskStore from '../data/TaskStore';
+import NoteStore from '../data/NoteStore';
 
-export default class TaskEditView extends Component<{}> {
+export default class NoteAddView extends Component<{}> {
 
   constructor(props) {
     super(props);
+
     this.leftButtonConfig = (
       <Button
         containerStyle={{
@@ -36,7 +37,6 @@ export default class TaskEditView extends Component<{}> {
         <Icon name="arrow-back" size={25} color='#219176' />
       </Button>
     );
-
     this.rightButtonConfig = {
       title: 'Save',
       tintColor: 'black',
@@ -47,54 +47,44 @@ export default class TaskEditView extends Component<{}> {
     };
 
     this.titleConfig = {
-      title: 'Edit Task',
+      title: 'Add Note',
       tintColor: '#299176',
     };
 
     this.state = {
-      name: TaskStore.currentItem.name,
-      description: TaskStore.currentItem.description,
-      due: new Date(TaskStore.currentItem.due),
+      name: '',
+      description: '',
+      due: '2017/07/20',
     }
   }
 
   onSave = () => {
-    const date = this.state.due;
-    TaskStore.edit(TaskStore.currentItem.id, {
+    const data = {
       name: this.state.name,
       description: this.state.description,
-      due: Date.parse(date.toLocaleString()),
-    });
-    this.props.onBack();
+      complete: false,
+      created: Date.now(),
+    };
+
+    NoteStore.add(data);
   }
 
-  onDelete = () => {
-    TaskStore.remove(TaskStore.currentItem);
-    this.props.onBack();
-  }
+  keyExtractor = (item) => item.id;
 
-  onChangeText = (key, value) => {
-    this.setState({
-      [key]: value,
-    });
+  renderRow = () => {
+    return (
+      <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} >
+        <View style={{
+          flex: 1,
+          paddingVertical: 15,
+          borderBottomColor: 'blue',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+        }} >
+          <Text> Hello </Text>
+        </View>
+      </TouchableOpacity>
+    )
   }
-
-  renderDatePicker = () => {
-    if (Platform.OS === 'ios') {
-      return (
-        <DatePickerIOS
-          date={this.state.due}
-          mode={'datetime'}
-          onDateChange={(time) => {
-            this.setState({
-              due: time,
-            })
-          }}
-        />
-      );
-    }
-  }
-
 
   render() {
     return (
@@ -112,7 +102,9 @@ export default class TaskEditView extends Component<{}> {
               style={{ paddingVertical: 10 }}
               value={this.state.name}
               onChangeText={(value) => {
-                this.onChangeText('name', value);
+                this.setState({
+                  name: value,
+                });
               }}
               placeholder={'name'}
               underlineColorAndroid={'rgba(0,0,0,0)'}
@@ -122,23 +114,17 @@ export default class TaskEditView extends Component<{}> {
             <TextInput
               style={{ paddingVertical: 10, height: 80 }}
               value={this.state.description}
+              onChangeText={(value) => {
+                this.setState({
+                  description: value,
+                });
+              }}
               multiline
               maxLength={500}
               numberOfLines={4}
-              onChangeText={(value) => {
-                this.onChangeText('description', value);
-              }}
               placeholder={'description'}
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
-          </View>
-          <View style={{
-            padding: 5,
-          }} >
-            {this.renderDatePicker()}
-          </View>
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
-            <Button onPress={this.onDelete}>Delete</Button>
           </View>
         </ScrollView>
 
@@ -150,7 +136,7 @@ export default class TaskEditView extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
   welcome: {
     fontSize: 20,

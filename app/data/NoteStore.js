@@ -7,7 +7,7 @@ const {
   action,
 } = require('mobx');
 
-class TaskStore {
+class NoteStore {
 
   list = [];
   @observable
@@ -31,7 +31,7 @@ class TaskStore {
     try {
       this.list = [];
       const value =
-        AsyncStorage.getItem('tasks');
+        AsyncStorage.getItem('notes');
       if (value !== null) {
         // We have data!!
         value.then((result) => {
@@ -54,7 +54,7 @@ class TaskStore {
     data.id = MD5(`${Date.now()}${Math.random()}`);
     const list = [data].concat(this.list.slice());
     try {
-      AsyncStorage.setItem('tasks', JSON.stringify(list));
+      AsyncStorage.setItem('notes', JSON.stringify(list));
     } catch (error) {
       alert(error);
       return;
@@ -78,7 +78,7 @@ class TaskStore {
     });
 
     try {
-      AsyncStorage.setItem('tasks', JSON.stringify(this.list));
+      AsyncStorage.setItem('notes', JSON.stringify(this.list));
     } catch (error) {
       alert(error);
       return;
@@ -91,7 +91,7 @@ class TaskStore {
     const id = item.id;
     try {
       this.list = this.list.filter((l) => l.id !== item.id);
-      AsyncStorage.setItem('tasks', JSON.stringify(this.list));
+      AsyncStorage.setItem('notes', JSON.stringify(this.list));
       this.listIsUpdateIn += 1;
     } catch (error) {
       alert(error);
@@ -114,24 +114,14 @@ class TaskStore {
     const year = date.getFullYear();
     let month = date.getMonth();
     const day = date.getDate();
-    let hour = date.getHours();
-    let min = date.getMinutes();
-
-    if (hour === 0) {
-      hour = "00";
-    }
-
-    if (min === 0) {
-      min = "00";
-    }
 
     month += 1;
 
-    return `${year}/${month}/${day} ${hour}:${min}`;
+    return `${year}/${month}/${day}`;
   }
 
 }
 
-const store = new TaskStore();
+const store = new NoteStore();
 
 export default store;

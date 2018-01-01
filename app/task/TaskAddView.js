@@ -54,15 +54,18 @@ export default class TaskAddView extends Component<{}> {
     this.state = {
       name: '',
       description: '',
-      due: '2017/07/20',
+      due: new Date(Date.now()),
     }
   }
 
   onSave = () => {
+    const date = this.state.due;
     const data = {
       name: this.state.name,
       description: this.state.description,
       complete: false,
+      due: Date.parse(date.toLocaleString()),
+      created: Date.now(),
     };
 
     TaskStore.add(data);
@@ -89,9 +92,12 @@ export default class TaskAddView extends Component<{}> {
     if (Platform.OS === 'ios') {
       return (
         <DatePickerIOS
-          date={new Date(Date.now())}
+          date={this.state.due}
           mode={'datetime'}
           onDateChange={(time) => {
+            this.setState({
+              due: time,
+            })
           }}
         />
       );

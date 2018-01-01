@@ -13,11 +13,11 @@ import NavigationBar from 'react-native-navbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 
-import TaskStore from '../data/TaskStore';
+import NoteStore from '../data/NoteStore';
 
 
 @observer
-export default class TaskListView extends Component<{}> {
+export default class NoteListView extends Component<{}> {
 
   constructor(props) {
     super(props);
@@ -28,7 +28,7 @@ export default class TaskListView extends Component<{}> {
   }
 
   componentWillMount() {
-    TaskStore.all();
+    NoteStore.all();
   }
 
   renderDone = (item) => {
@@ -56,7 +56,9 @@ export default class TaskListView extends Component<{}> {
 
     return (
       <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} onPress={() => {
-        TaskStore.edit(item.id, { complete: !item.complete });
+        // NoteStore.edit(item.id, { complete: !item.complete });
+        NoteStore.currentItem = item;
+        this.props.onEdit();
       }} >
         <View style={{ flex: 1, flexDirection: 'row' }} >
           <View style={{
@@ -64,30 +66,19 @@ export default class TaskListView extends Component<{}> {
             paddingVertical: 15,
             borderBottomColor: '#dddddd',
             borderBottomWidth: StyleSheet.hairlineWidth,
-            flexDirection: 'row',
-            // justifyContent: 'center',
-            alignItems: 'center',
           }} >
-            <Button
-              containerStyle={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 5,
-                backgroundColor: '#219176',
-                borderRadius: 15,
-                marginHorizontal: 10,
-              }}
-              onPress={() => {
-                TaskStore.currentItem = item;
-                this.props.onEdit();
-              }}
-            >
-              <Icon name="edit" size={15} color="white" />
-            </Button>
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1, padding: 5 }} >
               <Text style={{ fontSize: 17 }} > {item.name} </Text>
-              <Text style={{ fontSize: 12, color: 'gray' }} >{item.description} </Text>
-              <Text style={{ fontSize: 13, color: 'orange', paddingTop: 15 }} >{TaskStore.toLocaleDateString(item.due)} </Text>
+              <Text style={{ fontSize: 15, color: 'gray', padding: 5 }} >{item.description} </Text>
+              <Text style={{ fontSize: 15, color: 'gray', padding: 5 }} >{item.description} </Text>
+            </View>
+            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }} >
+              <Text style={{
+                fontSize: 15,
+                color: '#ff7c3d',
+                padding: 5
+              }} >
+                {NoteStore.toLocaleDateString(item.created)} </Text>
             </View>
           </View>
           {this.renderDone(item)}
@@ -134,11 +125,11 @@ export default class TaskListView extends Component<{}> {
         }}
         style={{ flex: 1 }}
         initialNumToRender={10}
-        data={TaskStore.ListData}
+        data={NoteStore.ListData}
         renderItem={this.renderRow}
         keyExtractor={this.keyExtractor}
         ListHeaderComponent={this.renderHeader()}
-        extraData={TaskStore.ListIsUpdate}
+        extraData={NoteStore.ListIsUpdate}
         // onRefresh={this.onRefresh}
         // refreshing={this.refreshing}
         windowSize={11}
@@ -147,7 +138,7 @@ export default class TaskListView extends Component<{}> {
   }
 
   render() {
-    if (TaskStore.ListIsUpdate);
+    if (NoteStore.ListIsUpdate);
 
     const icon = (
       <Button
