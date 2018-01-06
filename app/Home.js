@@ -7,6 +7,7 @@ import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 
+import * as firebase from 'firebase';
 import NavigationBar from 'react-native-navbar';
 import NavigationStore from './data/NavigationStore';
 import { observer } from 'mobx-react';
@@ -25,6 +26,18 @@ const initialLayout = {
   height: 0,
   width: Dimensions.get('window').width,
 };
+
+const config = {
+  apiKey: "AIzaSyAbpmdpCpt2qDGYaX9o2xHm8cC1UmbHPLQ",
+  authDomain: "yotodo-277b4.firebaseapp.com",
+  databaseURL: "https://yotodo-277b4.firebaseio.com",
+  projectId: "yotodo-277b4",
+  storageBucket: "yotodo-277b4.appspot.com",
+  messagingSenderId: "956797187570"
+};
+
+// https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html
+const firebaseApp = firebase.initializeApp(config);
 
 const FirstRoute = () => (
   <TaskListView
