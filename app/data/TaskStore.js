@@ -9,6 +9,7 @@ const {
 
 class TaskStore {
 
+  firebase = null;
   list = [];
   @observable
   listIsUpdateIn = 0;
@@ -60,6 +61,7 @@ class TaskStore {
       return;
     }
 
+    TaskStore.firebase.push(data);
     this.list = list;
   }
 
@@ -73,6 +75,8 @@ class TaskStore {
             item[key] = data[key];
           }
         });
+
+
         this.listIsUpdateIn += 1;
       }
     });

@@ -12,6 +12,9 @@ import NavigationBar from 'react-native-navbar';
 import NavigationStore from './data/NavigationStore';
 import { observer } from 'mobx-react';
 
+import TaskStore from './data/TaskStore';
+import NoteStore from './data/NoteStore';
+
 import TaskAddView from './task/TaskAddView';
 import TaskEditView from './task/TaskEditView';
 import TaskListView from './task/TaskListView';
@@ -89,11 +92,15 @@ export default class Home extends Component {
       title: 'Yup!',
       tintColor: '#299176',
     };
+
+    this.itemsRef = firebaseApp.database().ref();
+    TaskStore.firebase = this.itemsRef;
+    NoteStore.firebase = this.itemsRef;
   }
 
   _handleIndexChange = index => this.setState({ index });
 
-  _renderHeader = props => <TabBar {...props} style={{ backgroundColor: 'white'}} labelStyle={{ color: 'black' }} />;
+  _renderHeader = props => <TabBar {...props} style={{ backgroundColor: 'white' }} labelStyle={{ color: 'black' }} />;
 
   _renderScene = SceneMap({
     first: FirstRoute,
@@ -103,7 +110,8 @@ export default class Home extends Component {
   renderAdd = () => {
     if (NavigationStore.ShowTaskAdd) {
       return (
-        <TaskAddView onBack={() => {
+        <TaskAddView
+          onBack={() => {
           // alert('hi');
           NavigationStore.showTaskList();
           this.forceUpdate();

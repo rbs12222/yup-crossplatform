@@ -9,6 +9,7 @@ const {
 
 class NoteStore {
 
+  firebase = null;
   list = [];
   @observable
   listIsUpdateIn = 0;
