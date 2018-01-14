@@ -19,9 +19,14 @@ import Button from 'react-native-button';
 import NoteStore from '../data/NoteStore';
 
 export default class NoteEditView extends Component<{}> {
+  static navigationOptions = ({ navigation, screenProps }) => ({
+    header: null,
+  });
 
   constructor(props) {
     super(props);
+    this.navigation = this.props.navigation;
+
     this.leftButtonConfig = (
       <Button
         containerStyle={{
@@ -31,7 +36,9 @@ export default class NoteEditView extends Component<{}> {
           // borderRadius: 15,
           marginHorizontal: 5,
         }}
-        onPress={() => this.props.onBack()}
+        onPress={() => {
+          this.navigation.goBack();
+        }}
       >
         <Icon name="arrow-back" size={25} color='#219176' />
       </Button>
@@ -42,7 +49,7 @@ export default class NoteEditView extends Component<{}> {
       tintColor: 'black',
       handler: () => {
         this.onSave();
-        this.props.onBack();
+        this.navigation.goBack();
       }
     };
 
@@ -62,12 +69,12 @@ export default class NoteEditView extends Component<{}> {
       name: this.state.name,
       description: this.state.description,
     });
-    this.props.onBack();
+    this.navigation.goBack();
   }
 
   onDelete = () => {
     NoteStore.remove(NoteStore.currentItem);
-    this.props.onBack();
+    this.navigation.goBack();
   }
 
   onChangeText = (key, value) => {

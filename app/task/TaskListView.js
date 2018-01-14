@@ -9,7 +9,6 @@ import {
   Switch,
 } from 'react-native';
 import { observer } from 'mobx-react';
-import NavigationBar from 'react-native-navbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 
@@ -21,10 +20,7 @@ export default class TaskListView extends Component<{}> {
 
   constructor(props) {
     super(props);
-    this.titleConfig = {
-      title: 'Yup!',
-      tintColor: '#299176',
-    };
+    this.navigation = this.props.navigation;
   }
 
   componentWillMount() {
@@ -87,7 +83,11 @@ export default class TaskListView extends Component<{}> {
             <View style={{ flex: 1 }} >
               <Text style={{ fontSize: 17 }} > {item.name} </Text>
               <Text style={{ fontSize: 12, color: 'gray' }} >{item.description} </Text>
-              <Text style={{ fontSize: 13, color: 'orange', paddingTop: 15 }} >{TaskStore.toLocaleDateString(item.due)} </Text>
+              <Text style={{
+                fontSize: 13,
+                color: 'orange',
+                paddingTop: 15
+              }} >{TaskStore.toLocaleDateString(item.due)} </Text>
             </View>
           </View>
           {this.renderDone(item)}
@@ -117,7 +117,9 @@ export default class TaskListView extends Component<{}> {
               borderRadius: 15,
               marginHorizontal: 10,
             }}
-            onPress={() => this.props.onAdd()}
+            onPress={() => {
+              this.props.onAdd();
+            }}
           >
             <Icon name="add" size={15} color="white" />
           </Button>
@@ -148,20 +150,6 @@ export default class TaskListView extends Component<{}> {
 
   render() {
     if (TaskStore.ListIsUpdate);
-
-    const icon = (
-      <Button
-        containerStyle={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingRight: 10
-        }}
-        onPress={this.props.onMenu}
-      >
-        <Icon name="menu"
-              size={25}
-              color="#299176" />
-      </Button>);
     return (
       <View style={styles.container} >
         {this.renderView()}

@@ -9,7 +9,6 @@ import {
   Switch,
 } from 'react-native';
 import { observer } from 'mobx-react';
-import NavigationBar from 'react-native-navbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 

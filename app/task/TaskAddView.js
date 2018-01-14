@@ -12,16 +12,23 @@ import {
   DatePickerIOS,
 } from 'react-native';
 
+import { NavigationActions } from 'react-navigation';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import NavigationBar from 'react-native-navbar';
 import Button from 'react-native-button';
+import NavigationBar from 'react-native-navbar';
 
 import TaskStore from '../data/TaskStore';
 
 export default class TaskAddView extends Component<{}> {
 
+  static navigationOptions = ({ navigation, screenProps }) => ({
+    header: null,
+  });
+
   constructor(props) {
     super(props);
+    this.navigation = this.props.navigation;
 
     this.leftButtonConfig = (
       <Button
@@ -32,7 +39,9 @@ export default class TaskAddView extends Component<{}> {
           // borderRadius: 15,
           marginHorizontal: 5,
         }}
-        onPress={() => this.props.onBack()}
+        onPress={() => {
+          this.navigation.goBack();
+        }}
       >
         <Icon name="arrow-back" size={25} color='#219176' />
       </Button>
@@ -42,7 +51,7 @@ export default class TaskAddView extends Component<{}> {
       tintColor: 'black',
       handler: () => {
         this.onSave();
-        this.props.onBack();
+        this.navigation.goBack();
       }
     };
 
@@ -50,12 +59,14 @@ export default class TaskAddView extends Component<{}> {
       title: 'Add Task',
       tintColor: '#299176',
     };
-
     this.state = {
       name: '',
       description: '',
       due: new Date(Date.now()),
     }
+  }
+
+  componentDidMount() {
   }
 
   onSave = () => {
@@ -64,7 +75,7 @@ export default class TaskAddView extends Component<{}> {
       name: this.state.name,
       description: this.state.description,
       complete: false,
-      due: Date.parse(date.toLocaleString()),
+      due: 123,
       created: Date.now(),
     };
 
@@ -113,7 +124,6 @@ export default class TaskAddView extends Component<{}> {
           leftButton={this.leftButtonConfig}
           rightButton={this.rightButtonConfig}
         />
-
         <ScrollView style={{ flex: 1 }} >
           <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
             <TextInput

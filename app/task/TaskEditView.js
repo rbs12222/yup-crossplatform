@@ -13,15 +13,21 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import NavigationBar from 'react-native-navbar';
 import Button from 'react-native-button';
+import NavigationBar from 'react-native-navbar';
 
 import TaskStore from '../data/TaskStore';
 
 export default class TaskEditView extends Component<{}> {
 
+  static navigationOptions = ({ navigation, screenProps }) => ({
+    header: null,
+  });
+
   constructor(props) {
     super(props);
+    this.navigation = this.props.navigation;
+
     this.leftButtonConfig = (
       <Button
         containerStyle={{
@@ -31,7 +37,9 @@ export default class TaskEditView extends Component<{}> {
           // borderRadius: 15,
           marginHorizontal: 5,
         }}
-        onPress={() => this.props.onBack()}
+        onPress={() => {
+          this.navigation.goBack();
+        }}
       >
         <Icon name="arrow-back" size={25} color='#219176' />
       </Button>
@@ -42,7 +50,7 @@ export default class TaskEditView extends Component<{}> {
       tintColor: 'black',
       handler: () => {
         this.onSave();
-        this.props.onBack();
+        this.navigation.goBack();
       }
     };
 
@@ -65,12 +73,12 @@ export default class TaskEditView extends Component<{}> {
       description: this.state.description,
       due: Date.parse(date.toLocaleString()),
     });
-    this.props.onBack();
+    this.navigation.goBack();
   }
 
   onDelete = () => {
     TaskStore.remove(TaskStore.currentItem);
-    this.props.onBack();
+    this.navigation.goBack();
   }
 
   onChangeText = (key, value) => {
@@ -138,7 +146,7 @@ export default class TaskEditView extends Component<{}> {
             {this.renderDatePicker()}
           </View>
           <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
-            <Button onPress={this.onDelete}>Delete</Button>
+            <Button onPress={this.onDelete} >Delete</Button>
           </View>
         </ScrollView>
 
@@ -150,7 +158,7 @@ export default class TaskEditView extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
   },
   welcome: {
     fontSize: 20,

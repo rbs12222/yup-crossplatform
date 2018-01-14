@@ -60,9 +60,14 @@ class TaskStore {
       alert(error);
       return;
     }
-
-    TaskStore.firebase.push(data);
     this.list = list;
+    this.listIsUpdateIn += 1;
+
+    this.firebase.push(data).then((i) => {
+      alert(i);
+    }).catch((k) => {
+      alert(k);
+    });
   }
 
   @action
