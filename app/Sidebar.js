@@ -24,9 +24,44 @@ export default class Sidebar extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#219176' }} >
-        <Text>
-          Hello
-        </Text>
+        <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', margin: 10, marginTop: 70 }} >
+          <Text style={{ color: 'white', fontSize: 17 }} >
+            abc@abc.com
+          </Text>
+          <Button
+            containerStyle={{ marginVertical: 10 }}
+            onPress={() => {
+              //
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 17 }} >
+              Logout
+            </Text>
+          </Button>
+        </View>
+        <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', margin: 10, marginTop: 15 }} >
+          <Button
+            containerStyle={{ marginVertical: 10 }}
+          >
+            <Text style={{ color: 'white', fontSize: 17 }} >
+              Backup
+            </Text>
+          </Button>
+          <Button
+            containerStyle={{ marginVertical: 10 }}
+          >
+            <Text style={{ color: 'white', fontSize: 17 }} >
+              Restore
+            </Text>
+          </Button>
+          <Button
+            containerStyle={{ marginVertical: 10 }}
+          >
+            <Text style={{ color: 'white', fontSize: 17 }} >
+              About
+            </Text>
+          </Button>
+        </View>
       </View>
     )
   }
