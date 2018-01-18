@@ -1,19 +1,26 @@
 import * as firebase from "firebase";
 
 class Database {
-
   /**
    * Sets a users mobile number
    * @param userId
-   * @param mobile
+   * @param todos
    * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
    */
-  static setUserMobile(userId, mobile) {
-
+  static setUserTodos(userId, todos) {
     let userMobilePath = "/user/" + userId + "/details";
 
     return firebase.database().ref(userMobilePath).set({
-      mobile: mobile
+      todos: todos,
+    })
+
+  }
+
+  static setUserNotes(userId, notes) {
+    let userMobilePath = "/user/" + userId + "/details";
+
+    return firebase.database().ref(userMobilePath).set({
+      notes: notes,
     })
 
   }

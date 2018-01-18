@@ -80,6 +80,10 @@ export default class HomeComponent extends Component {
     })
   }
 
+  onError = (err) => {
+    alert(err);
+  }
+
   render() {
     return (
       <Drawer
@@ -90,7 +94,14 @@ export default class HomeComponent extends Component {
         closedDrawerOffset={-3}
         tweenDuratio={150}
         ref={(ref) => NavigationStore.sidebar = ref}
-        content={<Sidebar />}
+        content={<Sidebar
+          onLogout={() => {
+            this.setState({
+              showLogin: true,
+            })
+          }
+          }
+        />}
       >
         <Modal
           visible={this.state.showLogin}
@@ -99,6 +110,7 @@ export default class HomeComponent extends Component {
           }} >
           <User
             onSuccess={this.onSuccess}
+            onError={this.onError}
           />
         </Modal>
         <Home/>

@@ -15,31 +15,30 @@ const config = {
   messagingSenderId: "956797187570"
 };
 
+
+let instance = null;
+
 class UserStore {
 
-  init = () => {
-    firebase.initializeApp(config);
+  @observable
+  user = null;
+
+  set User(value) {
+    this.user = value;
   }
 
-  onRegister = () => {
-    try {
-      const email = this.state.email;
-      const pass = this.state.password;
-      firebase.auth()
-        .createUserWithEmailAndPassword(email, pass)
-        .then((yes) => {
-          alert('Login!!')
-        }).catch((err) => {
-        alert(err);
-      });
+  @computed
+  get User() {
+    return this.user;
+  }
 
-      console.log("Account created");
-
-      // Navigate to the Home page, the user is auto logged in
-
-    } catch (error) {
-      console.log(error.toString())
+  constructor() {
+    if (!instance) {
+      // this.app = firebase.initializeApp(config);
+      instance = this;
     }
+
+    return instance;
   }
 
   onLogin = () => {
@@ -56,15 +55,14 @@ class UserStore {
     }
   }
 
-  onLogout = () => {
-    try {
-      firebase.auth().signOut();
 
-      // Navigate to login view
+  setUserTodos(userId, todos) {
+    let userMobilePath = "/user/" + userId + "/details";
 
-    } catch (error) {
-      console.log(error);
-    }
+    return firebase.database().ref(userMobilePath).set({
+      todos: todos,
+    })
+
   }
 
 }
