@@ -69,8 +69,7 @@ export default class NoteListView extends Component<{}> {
             <View style={{ flex: 1, padding: 5 }} >
               <Text style={{ fontSize: 17 }} > {item.name} </Text>
               <Text style={{ fontSize: 15, color: 'gray', padding: 5 }} >{item.description} </Text>
-              <Text style={{ fontSize: 15, color: 'gray', padding: 5 }} >{item.description} </Text>
-            </View>
+              </View>
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }} >
               <Text style={{
                 fontSize: 15,
