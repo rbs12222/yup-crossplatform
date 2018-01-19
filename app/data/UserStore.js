@@ -41,27 +41,20 @@ class UserStore {
     return instance;
   }
 
-  onLogin = () => {
-    try {
-      firebase.auth()
-        .signInWithEmailAndPassword(email, pass);
-
-      console.log("Logged In!");
-
-      // Navigate to the Home page
-
-    } catch (error) {
-      console.log(error.toString())
+  setUserTodos(todos) {
+    if (!this.user) {
+      return;
     }
-  }
 
+    const userId = firebase.auth().currentUser.uid;
 
-  setUserTodos(userId, todos) {
-    let userMobilePath = "/user/" + userId + "/details";
+    let userMobilePath = "users/" + userId;
+
+    alert(todos);
 
     return firebase.database().ref(userMobilePath).set({
       todos: todos,
-    })
+    });
 
   }
 
