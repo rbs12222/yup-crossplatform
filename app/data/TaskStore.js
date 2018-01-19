@@ -1,11 +1,14 @@
 import { AsyncStorage } from 'react-native';
 import MD5 from './Crypt';
 
+import UserStore from './UserStore';
+
 const {
   computed,
   observable,
   action,
 } = require('mobx');
+
 
 class TaskStore {
 
@@ -55,7 +58,17 @@ class TaskStore {
     data.id = MD5(`${Date.now()}${Math.random()}`);
     const list = [data].concat(this.list.slice());
     try {
-      AsyncStorage.setItem('tasks', JSON.stringify(list));
+      const all = JSON.stringify(list);
+      AsyncStorage.setItem('tasks', all);
+
+      UserStore.setUserTodos(all)
+        .then(() => {
+
+        })
+        .catch((err) => {
+          alert(err.toSource());
+        });
+
     } catch (error) {
       alert(error);
       return;
@@ -63,11 +76,7 @@ class TaskStore {
     this.list = list;
     this.listIsUpdateIn += 1;
 
-    this.firebase.push(data).then((i) => {
-      alert(i);
-    }).catch((k) => {
-      alert(k);
-    });
+
   }
 
   @action
