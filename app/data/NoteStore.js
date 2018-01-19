@@ -62,6 +62,7 @@ class NoteStore {
     }
 
     this.list = list;
+    this.listIsUpdateIn += 1;
   }
 
   @action
