@@ -47,6 +47,7 @@ class TaskStore {
         })
         .catch(error => alert(error));
       } else {
+        alert('empty tasks');
         this.list = [];
         this.listIsUpdateIn += 1;
       }
