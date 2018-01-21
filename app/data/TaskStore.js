@@ -40,10 +40,12 @@ class TaskStore {
         // We have data!!
         value.then((result) => {
           // console.log(result);
+          alert(result);
           this.list = JSON.parse(result);
           if (!this.list) this.list = [];
           this.listIsUpdateIn += 1;
-        }).catch(error => alert(error));
+        })
+        .catch(error => alert(error));
       } else {
         this.list = [];
         this.listIsUpdateIn += 1;
