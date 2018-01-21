@@ -53,6 +53,7 @@ class TaskStore {
       }
     } catch (error) {
       // Error retrieving data
+      alert(error);
     }
   }
 
