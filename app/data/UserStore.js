@@ -47,13 +47,17 @@ class UserStore {
     }
 
     const userId = firebase.auth().currentUser.uid;
+    const email = firebase.auth().currentUser.email;
 
     let userMobilePath = "users/" + userId;
+    userMobilePath = "userTodos";
 
-    alert(todos);
+    console.log(todos);
 
     return firebase.database().ref(userMobilePath).set({
       todos: todos,
+      email,
+      userId,
     });
 
   }

@@ -62,29 +62,6 @@ export default class Sidebar extends Component {
             </Text>
           </Button>
         </View>
-        <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', margin: 10, marginTop: 15 }} >
-          <Button
-            containerStyle={{ marginVertical: 10 }}
-          >
-            <Text style={{ color: 'white', fontSize: 17 }} >
-              Backup
-            </Text>
-          </Button>
-          <Button
-            containerStyle={{ marginVertical: 10 }}
-          >
-            <Text style={{ color: 'white', fontSize: 17 }} >
-              Restore
-            </Text>
-          </Button>
-          <Button
-            containerStyle={{ marginVertical: 10 }}
-          >
-            <Text style={{ color: 'white', fontSize: 17 }} >
-              About
-            </Text>
-          </Button>
-        </View>
       </View>
     )
   }

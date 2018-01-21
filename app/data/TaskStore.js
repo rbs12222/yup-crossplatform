@@ -2,6 +2,7 @@ import { AsyncStorage } from 'react-native';
 import MD5 from './Crypt';
 
 import UserStore from './UserStore';
+import * as firebase from 'firebase';
 
 const {
   computed,
@@ -31,21 +32,53 @@ class TaskStore {
   }
 
   @action
-  all() {
+  fromService() {
+
+    this.all((count) => {
+
+      if (count === 0) {
+        const userId = firebase.auth().currentUser.uid;
+        let userMobilePath = "users/" + userId;
+        userMobilePath = 'userTodos';
+    
+        // alert('all');
+    
+        try {
+          firebase.database().ref(userMobilePath).on('value', (snapshot) => {
+    
+            // console.log(snapshot.val());
+    
+            const todo = snapshot.val();
+            this.list = JSON.parse(todo.todos);
+            this.listIsUpdateIn += 1;
+    
+            //if (TaskStore)
+          }, (err) => { console.log(err) });
+        }
+        catch (err) { alert(err.toString()) };
+
+      }
+    });
+  }
+
+  @action
+  all(cb) {
     try {
-      this.list = [];
+     //alert('hi'); 
+     this.list = [];
       const value =
         AsyncStorage.getItem('tasks');
       if (value !== null) {
         // We have data!!
         value.then((result) => {
           // console.log(result);
-          alert(result);
+          // alert('empty data');
           this.list = JSON.parse(result);
           if (!this.list) this.list = [];
           this.listIsUpdateIn += 1;
+          typeof cb === 'function' && cb(this.list.length);
         })
-        .catch(error => alert(error));
+        .catch(error => alert('no data' + error.toString()));
       } else {
         alert('empty tasks');
         this.list = [];
@@ -53,7 +86,7 @@ class TaskStore {
       }
     } catch (error) {
       // Error retrieving data
-      alert(error);
+      alert('exception: ' + error.toString());
     }
   }
 

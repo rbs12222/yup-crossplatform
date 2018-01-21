@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 import * as firebase from 'firebase';
 import UserStore from './data/UserStore';
+import trim from 'lodash/trim';
+import TaskStore from './data/TaskStore';
 
 const { width, height } = Dimensions.get('window');
 
@@ -25,12 +27,17 @@ export default class User extends Component {
   componentDidMount() {
   }
 
-  onSuccess = (user) => {
+  onSuccess = (user, isLogin = true) => {
     this.setState({
       loading: false,
     });
 
     UserStore.User = user;
+
+    if (isLogin) {
+
+      TaskStore.fromService();
+    }
 
     if (this.props.onSuccess) {
       this.props.onSuccess();
@@ -49,8 +56,8 @@ export default class User extends Component {
 
   onLogin = () => {
     try {
-      const email = this.state.email;
-      const pass = this.state.password;
+      const email = trim(this.state.email);
+      const pass = trim(this.state.password);
       this.setState({
         loading: true,
       });
@@ -82,7 +89,7 @@ export default class User extends Component {
       firebase.auth()
         .createUserWithEmailAndPassword(email, pass)
         .then((user) => {
-          this.onSuccess(user);
+          this.onSuccess(user, false);
         })
         .catch((err) => {
           this.onError(err);

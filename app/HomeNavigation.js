@@ -16,6 +16,7 @@ import NoteEditView from './note/NoteEditView';
 import NoteListView from './note/NoteListView';
 
 import NavigationStore from './data/NavigationStore';
+import UserStore from './data/UserStore';
 
 const Home = StackNavigator({
   Home: {
@@ -104,7 +105,7 @@ export default class HomeComponent extends Component {
         />}
       >
         <Modal
-          visible={this.state.showLogin}
+          visible={!UserStore.User}
           onRequestClose={() => {
 
           }} >

@@ -13,7 +13,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 
 import TaskStore from '../data/TaskStore';
-
+import * as firebase from 'firebase';
+import UserStore from '../data/UserStore';
 
 @observer
 export default class TaskListView extends Component<{}> {
@@ -24,7 +25,7 @@ export default class TaskListView extends Component<{}> {
   }
 
   componentWillMount() {
-    TaskStore.all();
+   
   }
 
   renderDone = (item) => {
