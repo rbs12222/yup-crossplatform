@@ -96,7 +96,18 @@ class TaskStore {
     });
 
     try {
-      AsyncStorage.setItem('tasks', JSON.stringify(this.list));
+      const all = JSON.stringify(this.list)
+      
+      AsyncStorage.setItem('tasks', all);
+      
+      UserStore.setUserTodos(all)
+        .then(() => {
+
+        })
+        .catch((err) => {
+          alert(err.toSource());
+        });
+        
     } catch (error) {
       alert(error);
       return;
@@ -109,7 +120,17 @@ class TaskStore {
     const id = item.id;
     try {
       this.list = this.list.filter((l) => l.id !== item.id);
-      AsyncStorage.setItem('tasks', JSON.stringify(this.list));
+      const all = JSON.stringify(this.list)
+      AsyncStorage.setItem('tasks', all);
+      
+      UserStore.setUserTodos(all)
+        .then(() => {
+
+        })
+        .catch((err) => {
+          alert(err.toSource());
+        });
+        
       this.listIsUpdateIn += 1;
     } catch (error) {
       alert(error);
