@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Dimensions, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Dimensions, StyleSheet, ActivityIndicator, Image, PixelRatio } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
@@ -127,11 +127,23 @@ export default class User extends Component {
   }
 
   renderRegister = () => {
+    const width2 = PixelRatio.getPixelSizeForLayoutSize(width * 0.25);
+    const height2 = PixelRatio.getPixelSizeForLayoutSize(width * 0.25);
+
+    let password = '';
+    for (let i = 0; i < this.state.password.length; ++i) {
+      password += '*';
+    }
+
+    console.log(this.state.password);
+
+
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-        <View style={{ flex: 1 }} >
+        <View style={{ flex: 1, paddingTop: height * 0.15 }} >
+          <Image source={require('./logo-01.png')} style={{ width: width2, height: height2 }} />
         </View>
-        <View style={{ flex: 1 }} >
+        <View style={{ flex: 1, paddingTop: 30 }} >
           <TextInput
             value={this.state.email}
             onChangeText={(value) => {
@@ -152,11 +164,15 @@ export default class User extends Component {
             underlineColorAndroid={'transparent'}
           />
           <TextInput
-            value={this.state.password}
+            value={password}
             onChangeText={(value) => {
-              this.setState({
-                password: value,
-              });
+              console.log(value);
+              const letter = value[value.length - 1];
+              this.setState(
+                (prevState) => ({
+                  password: prevState.password + letter,
+                })
+              );
             }}
             autoCapitalize={'none'}
             style={{
