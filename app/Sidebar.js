@@ -8,6 +8,8 @@ import Button from 'react-native-button';
 import * as firebase from 'firebase';
 
 import UserStore from './data/UserStore';
+import TaskStore from './data/TaskStore';
+import NoteStore from './data/NoteStore';
 
 @observer
 export default class Sidebar extends Component {
@@ -30,15 +32,20 @@ export default class Sidebar extends Component {
     try {
       firebase.auth().signOut()
         .then(() => {
+          TaskStore.clean();
+          NoteStore.clean();
           UserStore.User = null;
+
+
+          if (this.props.onLogout) {
+            this.props.onLogout();
+          }
+
         })
         .catch((err) => {
 
         });
 
-      if (this.props.onLogout) {
-        this.props.onLogout();
-      }
 
     } catch (error) {
       console.log(error);

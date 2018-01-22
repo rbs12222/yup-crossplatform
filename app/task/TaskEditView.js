@@ -71,7 +71,7 @@ export default class TaskEditView extends Component<{}> {
     TaskStore.edit(TaskStore.currentItem.id, {
       name: this.state.name,
       description: this.state.description,
-      due: Date.parse(date.toLocaleString()),
+      due: Date.parse(date.toUTCString()),
     });
     this.navigation.goBack();
   }

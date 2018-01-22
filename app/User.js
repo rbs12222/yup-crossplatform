@@ -7,6 +7,7 @@ import * as firebase from 'firebase';
 import UserStore from './data/UserStore';
 import trim from 'lodash/trim';
 import TaskStore from './data/TaskStore';
+import NoteStore from './data/NoteStore';
 
 const { width, height } = Dimensions.get('window');
 
@@ -37,6 +38,8 @@ export default class User extends Component {
     if (isLogin) {
 
       TaskStore.fromService();
+      NoteStore.fromService();
+
     }
 
     if (this.props.onSuccess) {

@@ -49,6 +49,12 @@ class TaskStore {
             // console.log(snapshot.val());
     
             const todo = snapshot.val();
+            if (!todo) {
+              this.list = [];
+              this.listIsUpdateIn += 1;
+              return;
+            }
+            AsyncStorage.setItem('tasks', todo.todos);
             this.list = JSON.parse(todo.todos);
             this.listIsUpdateIn += 1;
     
@@ -174,6 +180,18 @@ class TaskStore {
       return;
     }
 
+  }
+
+  clean () {
+    try {
+      AsyncStorage.setItem('tasks', '[]');
+      this.list = [];
+      this.listIsUpdateIn += 1;
+    }
+
+    catch (err) {
+      
+    }
   }
 
   toLocaleDateString = (time) => {

@@ -97,9 +97,7 @@ export default class HomeComponent extends Component {
         ref={(ref) => NavigationStore.sidebar = ref}
         content={<Sidebar
           onLogout={() => {
-            this.setState({
-              showLogin: true,
-            })
+            this.forceUpdate();
           }
           }
         />}

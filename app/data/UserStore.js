@@ -24,6 +24,7 @@ class UserStore {
   user = null;
 
   set User(value) {
+   
     this.user = value;
   }
 
@@ -56,6 +57,27 @@ class UserStore {
 
     return firebase.database().ref(userMobilePath).set({
       todos: todos,
+      email,
+      userId,
+    });
+
+  }
+
+  setUserNotes(notes) {
+    if (!this.user) {
+      return;
+    }
+
+    const userId = firebase.auth().currentUser.uid;
+    const email = firebase.auth().currentUser.email;
+
+    let userMobilePath = "users/" + userId;
+    userMobilePath = "userNotes";
+
+    console.log(notes);
+
+    return firebase.database().ref(userMobilePath).set({
+      notes: notes,
       email,
       userId,
     });

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, Modal } from 'react-native';
+import { View, Text, Dimensions, Modal ,Image, PixelRatio} from 'react-native';
 
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
@@ -61,7 +61,13 @@ export default class Home extends Component {
       title: 'Yup!',
       tintColor: '#299176',
     };
-  }
+
+    const height = PixelRatio.getPixelSizeForLayoutSize(17);
+    const width = PixelRatio.getPixelSizeForLayoutSize(167 / 90 * 17);
+    const marginTop = PixelRatio.getPixelSizeForLayoutSize(0);
+
+    this.titleConfig = <Image source={require('./logo-02.png')} style={{height,width, marginTop}}/>
+   }
 
   componentDidMount() {
   }

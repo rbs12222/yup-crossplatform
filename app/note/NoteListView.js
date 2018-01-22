@@ -27,7 +27,7 @@ export default class NoteListView extends Component<{}> {
   }
 
   componentWillMount() {
-    NoteStore.all();
+    // NoteStore.all();
   }
 
   renderDone = (item) => {

@@ -75,7 +75,7 @@ export default class TaskAddView extends Component<{}> {
       name: this.state.name,
       description: this.state.description,
       complete: false,
-      due: 123,
+      due: Date.parse(this.state.due.toUTCString()),
       created: Date.now(),
     };
 
