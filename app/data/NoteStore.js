@@ -38,7 +38,7 @@ class NoteStore {
       if (count === 0) {
         const userId = firebase.auth().currentUser.uid;
         let userMobilePath = "users/" + userId;
-        userMobilePath = 'userNotes';
+        userMobilePath += '/userNotes';
     
         // alert('all');
     

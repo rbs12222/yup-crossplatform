@@ -51,7 +51,7 @@ class UserStore {
     const email = firebase.auth().currentUser.email;
 
     let userMobilePath = "users/" + userId;
-    userMobilePath = "userTodos";
+    userMobilePath += "/userTodos";
 
     console.log(todos);
 
@@ -72,7 +72,7 @@ class UserStore {
     const email = firebase.auth().currentUser.email;
 
     let userMobilePath = "users/" + userId;
-    userMobilePath = "userNotes";
+    userMobilePath += "/userNotes";
 
     console.log(notes);
 

@@ -39,7 +39,7 @@ class TaskStore {
       if (count === 0) {
         const userId = firebase.auth().currentUser.uid;
         let userMobilePath = "users/" + userId;
-        userMobilePath = 'userTodos';
+        userMobilePath += '/userTodos';
     
         // alert('all');
     
@@ -49,6 +49,9 @@ class TaskStore {
             // console.log(snapshot.val());
     
             const todo = snapshot.val();
+
+            console.log(todo);
+
             if (!todo) {
               this.list = [];
               this.listIsUpdateIn += 1;
