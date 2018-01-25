@@ -16,6 +16,7 @@
     "react-native-drawer": "^2.5.0",
     "react-native-gesture-handler": "^1.0.0-alpha.35",
     "react-native-navbar": "^2.1.0",
+    "react-native-push-notification": "^3.0.2",
     "react-native-tab-view": "^0.0.73",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.26"
@@ -31,5 +32,3 @@
     "preset": "react-native"
   }
 }
-
-

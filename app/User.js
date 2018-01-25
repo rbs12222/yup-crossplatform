@@ -19,9 +19,11 @@ export default class User extends Component {
     this.state = {
       email: '',
       password: '',
+      masks: '',
       loading: false,
     };
 
+    this.password = '';
     this.navigation = this.props.navigation;
   }
 
@@ -127,23 +129,23 @@ export default class User extends Component {
   }
 
   renderRegister = () => {
-    const width2 = PixelRatio.getPixelSizeForLayoutSize(width * 0.25);
-    const height2 = PixelRatio.getPixelSizeForLayoutSize(width * 0.25);
+    const width2 = width * 0.35;
+    const height2 = width * 0.35;
+
 
     let password = '';
-    for (let i = 0; i < this.state.password.length; ++i) {
+    for (let i = 0; i < this.state.masks.length; ++i) {
       password += '*';
     }
 
-    console.log(this.state.password);
-
+    console.log('real: ' + this.state.password);
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-        <View style={{ flex: 1, paddingTop: height * 0.15 }} >
+        <View style={{ flex: 0, paddingTop: height * 0.10 }} >
           <Image source={require('./logo-01.png')} style={{ width: width2, height: height2 }} />
         </View>
-        <View style={{ flex: 1, paddingTop: 30 }} >
+        <View style={{ flex: 1, paddingTop: 10 }} >
           <TextInput
             value={this.state.email}
             onChangeText={(value) => {
@@ -167,10 +169,10 @@ export default class User extends Component {
             value={password}
             onChangeText={(value) => {
               console.log(value);
-              const letter = value[value.length - 1];
               this.setState(
                 (prevState) => ({
-                  password: prevState.password + letter,
+                  password: value.length >= prevState.password.length ? prevState.password + value.slice(-1) : prevState.password.slice(0, prevState.password.length - 1),
+                  masks: value,
                 })
               );
             }}

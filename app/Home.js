@@ -1,41 +1,23 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, Modal ,Image, PixelRatio} from 'react-native';
+import { View, Text, Dimensions, Modal, Image, PixelRatio } from 'react-native';
 
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 
-import * as firebase from 'firebase';
+import Config from './Config';
 import NavigationStore from './data/NavigationStore';
 import NavigationBar from 'react-native-navbar';
 import { observer } from 'mobx-react';
 
-import TaskStore from './data/TaskStore';
-import NoteStore from './data/NoteStore';
-
 import TaskListView from './task/TaskListView';
 import NoteListView from './note/NoteListView';
-
-const { width, height } = Dimensions.get('window');
 
 const initialLayout = {
   height: 0,
   width: Dimensions.get('window').width,
 };
-
-const config = {
-  apiKey: "AIzaSyAbpmdpCpt2qDGYaX9o2xHm8cC1UmbHPLQ",
-  authDomain: "yotodo-277b4.firebaseapp.com",
-  databaseURL: "https://yotodo-277b4.firebaseio.com",
-  projectId: "yotodo-277b4",
-  storageBucket: "yotodo-277b4.appspot.com",
-  messagingSenderId: "956797187570"
-};
-
-// https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html
-const firebaseApp = firebase.initializeApp(config);
-
 
 @observer
 export default class Home extends Component {
@@ -45,7 +27,6 @@ export default class Home extends Component {
       header: null,
     }
   );
-
 
   constructor(props) {
     super(props);
@@ -62,14 +43,15 @@ export default class Home extends Component {
       tintColor: '#299176',
     };
 
-    const height = PixelRatio.getPixelSizeForLayoutSize(17);
-    const width = PixelRatio.getPixelSizeForLayoutSize(167 / 90 * 17);
-    const marginTop = PixelRatio.getPixelSizeForLayoutSize(0);
+    const height = 51;
+    const width = 167 / 90 * 17 * 3;
+    const marginTop = 0;
 
-    this.titleConfig = <Image source={require('./logo-02.png')} style={{height,width, marginTop}}/>
-   }
+    this.titleConfig = <Image source={require('./logo-02.png')} style={{ height, width, marginTop }} />
+  }
 
   componentDidMount() {
+    Config.init();
   }
 
   _handleIndexChange = index => this.setState({ index });
