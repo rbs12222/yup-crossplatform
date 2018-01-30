@@ -71,6 +71,8 @@ export default class TaskAddView extends Component<{}> {
 
   onSave = () => {
     const date = this.state.due;
+    const created = Date.now();
+
     const data = {
       name: this.state.name,
       description: this.state.description,
@@ -78,6 +80,13 @@ export default class TaskAddView extends Component<{}> {
       due: Date.parse(this.state.due.toUTCString()),
       created: Date.now(),
     };
+
+    PushNotification.localNotificationSchedule({
+      userInfo: { id: `${created}` },
+      message: `Todo - ${this.state.name} arrived!`, // (required)
+      date: date // in 60 secs
+    });
+
 
     TaskStore.add(data);
   }

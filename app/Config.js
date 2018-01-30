@@ -32,6 +32,8 @@ class Config {
 
 
         // process the notification
+        
+        alert(notification.message);
 
         // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
         notification.finish(PushNotificationIOS.FetchResult.NoData);

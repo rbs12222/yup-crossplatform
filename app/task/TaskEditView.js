@@ -67,12 +67,22 @@ export default class TaskEditView extends Component<{}> {
   }
 
   onSave = () => {
-    const date = this.state.due;
+     const date = this.state.due;
     TaskStore.edit(TaskStore.currentItem.id, {
       name: this.state.name,
       description: this.state.description,
       due: Date.parse(date.toUTCString()),
     });
+
+    const created = `${TaskStore.currentItem.created}`;
+    PushNotification.cancelLocalNotifications({id: created});
+
+    PushNotification.localNotificationSchedule({
+      userInfo: { id: created },
+      message: `Todo - ${this.state.name} arrived!`, // (required)
+      date: date // in 60 secs
+    });
+    
     this.navigation.goBack();
   }
 
