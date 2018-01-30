@@ -61,11 +61,6 @@ class Config {
       requestPermissions: true,
     });
 
-    PushNotification.localNotificationSchedule({
-      message: "My Notification Message", // (required)
-      date: new Date(Date.now() + (30 * 1000)) // in 60 secs
-    });
-
     return;
 
     // https://github.com/zo0r/react-native-push-notification
