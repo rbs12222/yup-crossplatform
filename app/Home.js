@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, Modal, Image, PixelRatio } from 'react-native';
+import { View, Text, Dimensions, Modal, Image, PixelRatio, Platform } from 'react-native';
 
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
@@ -43,8 +43,8 @@ export default class Home extends Component {
       tintColor: '#299176',
     };
 
-    const height = 51;
-    const width = 167 / 90 * 17 * 3;
+    const height = Platform.OS === 'ios' ? 51 : 35;
+    const width = 167 / 90 * height;
     const marginTop = 0;
 
     this.titleConfig = <Image source={require('./logo-02.png')} style={{ height, width, marginTop }} />
