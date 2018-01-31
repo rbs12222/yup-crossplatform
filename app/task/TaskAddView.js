@@ -9,9 +9,10 @@ import {
   TextInput,
   ScrollView,
   DatePickerAndroid,
-  DatePickerIOS,
+  DatePickerIOS, TimePickerAndroid,
 } from 'react-native';
 
+import PushNotification from 'react-native-push-notification';
 import { NavigationActions } from 'react-navigation';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -59,34 +60,98 @@ export default class TaskAddView extends Component<{}> {
       title: 'Add Task',
       tintColor: '#299176',
     };
+
+    const now = new Date(Date.now());
+    let month = now.getMonth();
+    month += 1;
+
+    if (month <= 9) {
+      month = '0' + month;
+    }
+    const date = `${now.getFullYear()}-${month}-${now.getDate()}`;
+    const time = `${now.getHours()}:${now.getMinutes()}`;
+
     this.state = {
       name: '',
       description: '',
-      due: new Date(Date.now()),
+      due: now,
+      date: date,
+      time: time,
     }
   }
 
   componentDidMount() {
   }
 
+// in android, it will use system date picker
+  onSelectDate = async () => {
+    try {
+      const { action, year, month, day } = await DatePickerAndroid.open({
+        date: this.state.due,
+        mode: 'spinner',
+      });
+
+      if (action !== DatePickerAndroid.dismissedAction) {
+        const m = parseInt(month, 10) + 1;
+        this.onSelectTime();
+        if (m <= 9) {
+          m = '0' + m;
+        }
+        this.setState({
+          date: `${year}-${m}-${day}`,
+        });
+      }
+    } catch ({ code, message }) {
+      // alert(message)
+    }
+  }
+
+  onSelectTime = async () => {
+    try {
+      const { action, hour, minute } = await TimePickerAndroid.open({
+        hour: this.state.due.getHours(),
+        minute: this.state.due.getMinutes(),
+        is24Hour: true, // Will display '2 PM'
+        mode: 'spinner',
+      });
+      if (action !== TimePickerAndroid.dismissedAction) {
+        // Selected hour (0-23), minute (0-59)
+        let min = minute;
+        if (minute >= 0 && minute <= 9) {
+          min = '0' + min;
+        }
+        const time = `${hour}:${min}`
+        this.setState({
+          time: time,
+        });
+      }
+    }
+    catch ({ code, message }) {
+      // alert(message)
+    }
+  }
+
   onSave = () => {
-    const date = this.state.due;
+    let date = Date.parse(this.state.due.toUTCString());
     const created = Date.now();
+
+    if (Platform.OS === 'android') {
+      date = Date.parse(this.state.date + 'T' + this.state.time);
+    }
 
     const data = {
       name: this.state.name,
       description: this.state.description,
       complete: false,
-      due: Date.parse(this.state.due.toUTCString()),
+      due: date,
       created: Date.now(),
     };
 
     PushNotification.localNotificationSchedule({
       userInfo: { id: `${created}` },
       message: `Todo - ${this.state.name} arrived!`, // (required)
-      date: date // in 60 secs
+      date: new Date(date), // in 60 secs
     });
-
 
     TaskStore.add(data);
   }
@@ -95,13 +160,13 @@ export default class TaskAddView extends Component<{}> {
 
   renderRow = () => {
     return (
-      <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} >
+      <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }}>
         <View style={{
           flex: 1,
           paddingVertical: 15,
           borderBottomColor: 'blue',
           borderBottomWidth: StyleSheet.hairlineWidth,
-        }} >
+        }}>
           <Text> Hello </Text>
         </View>
       </TouchableOpacity>
@@ -122,19 +187,37 @@ export default class TaskAddView extends Component<{}> {
         />
       );
     }
+
+    return (
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+        <Button
+          containerStyle={{
+            padding: 10,
+            backgroundColor: '#299176',
+            flex: 1,
+            alignItems: 'center',
+          }}
+          onPress={this.onSelectDate}
+        >
+          <Text style={{ fontSize: 17, color: 'white' }}>
+            {this.state.date + ' ' + this.state.time}
+          </Text>
+        </Button>
+      </View>
+    );
   }
 
   render() {
     return (
-      <View style={styles.container} >
+      <View style={styles.container}>
         <NavigationBar
           tintColor={'white'}
           title={this.titleConfig}
           leftButton={this.leftButtonConfig}
           rightButton={this.rightButtonConfig}
         />
-        <ScrollView style={{ flex: 1 }} >
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
+        <ScrollView style={{ flex: 1 }}>
+          <View style={{ padding: 5, borderColor: '#299176', borderWidth: 1, margin: 10 }}>
             <TextInput
               style={{ paddingVertical: 10 }}
               value={this.state.name}
@@ -147,7 +230,7 @@ export default class TaskAddView extends Component<{}> {
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
           </View>
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
+          <View style={{ padding: 5, borderColor: '#299176', borderWidth: 1, margin: 10 }}>
             <TextInput
               style={{ paddingVertical: 10, height: 80 }}
               value={this.state.description}
@@ -165,7 +248,7 @@ export default class TaskAddView extends Component<{}> {
           </View>
           <View style={{
             padding: 5,
-          }} >
+          }}>
             {this.renderDatePicker()}
           </View>
         </ScrollView>
@@ -175,19 +258,20 @@ export default class TaskAddView extends Component<{}> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+const
+  styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'white',
+    },
+    welcome: {
+      fontSize: 20,
+      textAlign: 'center',
+      margin: 10,
+    },
+    instructions: {
+      textAlign: 'center',
+      color: '#333333',
+      marginBottom: 5,
+    },
+  });

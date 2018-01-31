@@ -9,9 +9,10 @@ import {
   TextInput,
   TouchableOpacity,
   DatePickerIOS,
-  DatePickerAndroid,
+  DatePickerAndroid, TimePickerAndroid,
 } from 'react-native';
 
+import PushNotification from 'react-native-push-notification';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from 'react-native-button';
 import NavigationBar from 'react-native-navbar';
@@ -59,19 +60,82 @@ export default class TaskEditView extends Component<{}> {
       tintColor: '#299176',
     };
 
+    const now = new Date(TaskStore.currentItem.due);
+    let month = now.getMonth();
+    month += 1;
+
+    if (month <= 9) {
+      month = '0' + month;
+    }
+    const date = `${now.getFullYear()}-${month}-${now.getDate()}`;
+    const time = `${now.getHours()}:${now.getMinutes()}`;
+
     this.state = {
       name: TaskStore.currentItem.name,
       description: TaskStore.currentItem.description,
-      due: new Date(TaskStore.currentItem.due),
+      due: now,
+      date: date,
+      time: time,
+    }
+  }
+// in android, it will use system date picker
+  onSelectDate = async () => {
+    try {
+      const { action, year, month, day } = await DatePickerAndroid.open({
+        date: this.state.due,
+        mode: 'spinner',
+      });
+
+      if (action !== DatePickerAndroid.dismissedAction) {
+        const m = parseInt(month, 10) + 1;
+        this.onSelectTime();
+        if (m <= 9) {
+          m = '0' + m;
+        }
+        this.setState({
+          date: `${year}-${m}-${day}`,
+        });
+      }
+    } catch ({ code, message }) {
+      // alert(message)
+    }
+  }
+
+  onSelectTime = async () => {
+    try {
+      const { action, hour, minute } = await TimePickerAndroid.open({
+        hour: this.state.due.getHours(),
+        minute: this.state.due.getMinutes(),
+        is24Hour: true, // Will display '2 PM'
+        mode: 'spinner',
+      });
+      if (action !== TimePickerAndroid.dismissedAction) {
+        // Selected hour (0-23), minute (0-59)
+        let min = minute;
+        if (minute >= 0 && minute <= 9) {
+          min = '0' + min;
+        }
+        const time = `${hour}:${min}`
+        this.setState({
+          time: time,
+        });
+      }
+    }
+    catch ({ code, message }) {
+      // alert(message)
     }
   }
 
   onSave = () => {
-     const date = this.state.due;
+    let date = Date.parse(this.state.due.toUTCString());
+    if (Platform.OS === 'android') {
+      date = Date.parse(this.state.date + 'T' + this.state.time);
+    }
+
     TaskStore.edit(TaskStore.currentItem.id, {
       name: this.state.name,
       description: this.state.description,
-      due: Date.parse(date.toUTCString()),
+      due: date,
     });
 
     const created = `${TaskStore.currentItem.created}`;
@@ -80,9 +144,9 @@ export default class TaskEditView extends Component<{}> {
     PushNotification.localNotificationSchedule({
       userInfo: { id: created },
       message: `Todo - ${this.state.name} arrived!`, // (required)
-      date: date // in 60 secs
+      date: new Date(date) // in 60 secs
     });
-    
+
     this.navigation.goBack();
   }
 
@@ -111,6 +175,24 @@ export default class TaskEditView extends Component<{}> {
         />
       );
     }
+
+    return (
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+        <Button
+          containerStyle={{
+            padding: 10,
+            backgroundColor: '#299176',
+            flex: 1,
+            alignItems: 'center',
+          }}
+          onPress={this.onSelectDate}
+        >
+          <Text style={{ fontSize: 17, color: 'white' }}>
+            {this.state.date + ' ' + this.state.time}
+          </Text>
+        </Button>
+      </View>
+    );
   }
 
 
