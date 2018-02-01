@@ -68,7 +68,13 @@ export default class TaskAddView extends Component<{}> {
     if (month <= 9) {
       month = '0' + month;
     }
-    const date = `${now.getFullYear()}-${month}-${now.getDate()}`;
+
+    let day = now.getDate();
+
+    if (day <= 9) {
+      day = '0' + day;
+    }
+    const date = `${now.getFullYear()}-${month}-${day}`;
     const time = `${now.getHours()}:${now.getMinutes()}`;
 
     this.state = {
@@ -92,13 +98,18 @@ export default class TaskAddView extends Component<{}> {
       });
 
       if (action !== DatePickerAndroid.dismissedAction) {
-        const m = parseInt(month, 10) + 1;
+        let m = parseInt(month, 10) + 1;
+        let d = parseInt(day, 10);
         this.onSelectTime();
         if (m <= 9) {
           m = '0' + m;
         }
+
+        if (d <= 9) {
+          d = '0' + d;
+        }
         this.setState({
-          date: `${year}-${m}-${day}`,
+          date: `${year}-${m}-${d}`,
         });
       }
     } catch ({ code, message }) {
@@ -117,10 +128,14 @@ export default class TaskAddView extends Component<{}> {
       if (action !== TimePickerAndroid.dismissedAction) {
         // Selected hour (0-23), minute (0-59)
         let min = minute;
+        let h = hour;
         if (minute >= 0 && minute <= 9) {
           min = '0' + min;
         }
-        const time = `${hour}:${min}`
+        if (h <= 9) {
+          h = '0' + h;
+        }
+        const time = `${h}:${min}`
         this.setState({
           time: time,
         });
@@ -138,6 +153,9 @@ export default class TaskAddView extends Component<{}> {
     if (Platform.OS === 'android') {
       date = Date.parse(this.state.date + 'T' + this.state.time);
     }
+
+    console.log(this.state.date + 'T' + this.state.time);
+    console.log(date);
 
     const data = {
       name: this.state.name,
