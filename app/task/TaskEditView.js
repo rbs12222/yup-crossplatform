@@ -9,7 +9,9 @@ import {
   TextInput,
   TouchableOpacity,
   DatePickerIOS,
-  DatePickerAndroid, TimePickerAndroid,
+  DatePickerAndroid,
+  TimePickerAndroid,
+  Picker,
 } from 'react-native';
 
 import PushNotification from 'react-native-push-notification';
@@ -81,11 +83,13 @@ export default class TaskEditView extends Component<{}> {
     this.state = {
       name: TaskStore.currentItem.name,
       description: TaskStore.currentItem.description,
+      priority: TaskStore.currentItem.priority,
       due: now,
       date: date,
       time: time,
     }
   }
+
 // in android, it will use system date picker
   onSelectDate = async () => {
     try {
@@ -146,21 +150,25 @@ export default class TaskEditView extends Component<{}> {
   onSave = () => {
     let date = Date.parse(this.state.due.toUTCString());
     if (Platform.OS === 'android') {
-      date = Date.parse(this.state.date + 'T' + this.state.time);
+      date = Date.parse(new Date(this.state.date + 'T' + this.state.time).toUTCString());
     }
+
+
+    date = Math.floor(date / (60 * 1000)) * 60 * 1000;
 
     TaskStore.edit(TaskStore.currentItem.id, {
       name: this.state.name,
       description: this.state.description,
+      priority: this.state.priority,
       due: date,
     });
 
     const created = `${TaskStore.currentItem.created}`;
-    PushNotification.cancelLocalNotifications({id: created});
+    PushNotification.cancelLocalNotifications({ id: created });
 
     PushNotification.localNotificationSchedule({
       userInfo: { id: created },
-      message: `Todo - ${this.state.name} arrived!`, // (required)
+      message: `Todo - ${this.state.name} is due now`, // (required)
       date: new Date(date) // in 60 secs
     });
 
@@ -176,6 +184,35 @@ export default class TaskEditView extends Component<{}> {
     this.setState({
       [key]: value,
     });
+  }
+
+  renderPicker = () => {
+
+    const list = ['urgent', 'average', 'less'];
+
+    const options = list.map((el, index) => {
+      return (
+        <Picker.Item
+          key={el}
+          value={el}
+          label={el.toUpperCase()}
+        />
+      );
+    })
+
+    return (
+      <Picker
+        selectedValue={this.state.priority}
+        onValueChange={(value) => {
+          this.setState({
+            priority: value,
+          });
+        }}
+      >
+        {options}
+      </Picker>
+    )
+
   }
 
   renderDatePicker = () => {
@@ -215,7 +252,7 @@ export default class TaskEditView extends Component<{}> {
 
   render() {
     return (
-      <View style={styles.container} >
+      <View style={styles.container}>
         <NavigationBar
           tintColor={'white'}
           title={this.titleConfig}
@@ -223,8 +260,8 @@ export default class TaskEditView extends Component<{}> {
           rightButton={this.rightButtonConfig}
         />
 
-        <ScrollView style={{ flex: 1 }} >
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
+        <ScrollView style={{ flex: 1 }}>
+          <View style={{ padding: 5, borderColor: '#299176', borderWidth: 1, margin: 10 }}>
             <TextInput
               style={{ paddingVertical: 10 }}
               value={this.state.name}
@@ -235,7 +272,7 @@ export default class TaskEditView extends Component<{}> {
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
           </View>
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
+          <View style={{ padding: 5, borderColor: '#299176', borderWidth: 1, margin: 10 }}>
             <TextInput
               style={{ paddingVertical: 10, height: 80 }}
               value={this.state.description}
@@ -250,12 +287,21 @@ export default class TaskEditView extends Component<{}> {
             />
           </View>
           <View style={{
-            padding: 5,
-          }} >
-            {this.renderDatePicker()}
+            padding: 5
+          }}>
+            {this.renderPicker()}
           </View>
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
-            <Button onPress={this.onDelete} >Delete</Button>
+          <View style={{
+            padding: 5,
+          }}>
+          </View>
+          <View style={{ padding: 5, borderColor: '#299176', backgroundColor: '#299176', borderWidth: 1, margin: 10 }}>
+          <Button onPress={this.onDelete} containerStyle={{justifyContent: 'center', alignItems: 'center'}} >
+            <Text style={{fontSize: 15, color: 'white'}}>
+
+            Delete
+            </Text>
+            </Button>
           </View>
         </ScrollView>
 

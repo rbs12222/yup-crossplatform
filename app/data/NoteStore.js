@@ -158,8 +158,10 @@ class NoteStore {
     if (!item) return;
     const id = item.id;
     try {
-      this.list = this.list.filter((l) => l.id !== item.id);
-      const all = JSON.stringify(list);
+      if (this.list) {
+        this.list = this.list.filter((l) => l.id !== item.id);
+      }
+      const all = JSON.stringify(this.list);
       AsyncStorage.setItem('notes', all);
 
 

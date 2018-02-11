@@ -25,7 +25,7 @@ export default class TaskListView extends Component<{}> {
   }
 
   componentWillMount() {
-   
+
   }
 
   renderDone = (item) => {
@@ -40,8 +40,8 @@ export default class TaskListView extends Component<{}> {
         borderBottomColor: '#dddddd',
         borderBottomWidth: StyleSheet.hairlineWidth,
         paddingHorizontal: 10,
-      }} >
-        <Icon name="check" size={20} color="blue" />
+      }}>
+        <Icon name="check" size={20} color='#299176' />
       </View>
     )
   }
@@ -50,12 +50,21 @@ export default class TaskListView extends Component<{}> {
 
   renderRow = (row) => {
     const item = row.item;
+    let color = 'orange';
 
+    if (item.priority && item.priority.toString().toLowerCase() === 'less') {
+      color = 'green';
+    }
+
+    if (item.priority && item.priority.toString().toLowerCase() === 'urgent') {
+      color = 'red';
+
+    }
     return (
       <TouchableOpacity activeOpacity={0.2} style={{ flex: 1 }} onPress={() => {
         TaskStore.edit(item.id, { complete: !item.complete });
-      }} >
-        <View style={{ flex: 1, flexDirection: 'row' }} >
+      }}>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
           <View style={{
             flex: 1,
             paddingVertical: 15,
@@ -64,7 +73,7 @@ export default class TaskListView extends Component<{}> {
             flexDirection: 'row',
             // justifyContent: 'center',
             alignItems: 'center',
-          }} >
+          }}>
             <Button
               containerStyle={{
                 justifyContent: 'center',
@@ -81,14 +90,15 @@ export default class TaskListView extends Component<{}> {
             >
               <Icon name="edit" size={15} color="white" />
             </Button>
-            <View style={{ flex: 1 }} >
-              <Text style={{ fontSize: 17 }} > {item.name} </Text>
-              <Text style={{ fontSize: 12, color: 'gray' }} >{item.description} </Text>
+            <View style={{ flex: 1, paddingLeft: 5 }}>
+              <Text style={{ fontSize: 17 }}> {item.name} </Text>
+              <Text style={{ fontSize: 12, color: '#555', marginTop: 5 }}>{item.description} </Text>
+              <Text style={{ fontSize: 15, color, }}> {item.priority} </Text>
               <Text style={{
                 fontSize: 13,
-                color: 'orange',
+                color: '#299176',
                 paddingTop: 15
-              }} >{TaskStore.toLocaleDateString(item.due)} </Text>
+              }}>{TaskStore.toLocaleDateString(item.due)} </Text>
             </View>
           </View>
           {this.renderDone(item)}
@@ -99,7 +109,7 @@ export default class TaskListView extends Component<{}> {
 
   renderHeader = () => {
     return (
-      <View style={{ flex: 1, flexDirection: 'row' }} >
+      <View style={{ flex: 1, flexDirection: 'row' }}>
         <View style={{
           flex: 1,
           paddingVertical: 15,
@@ -108,7 +118,7 @@ export default class TaskListView extends Component<{}> {
           flexDirection: 'row',
           // justifyContent: 'center',
           alignItems: 'center',
-        }} >
+        }}>
           <Button
             containerStyle={{
               justifyContent: 'center',
@@ -150,9 +160,9 @@ export default class TaskListView extends Component<{}> {
   }
 
   render() {
-    if (TaskStore.ListIsUpdate);
+    if (TaskStore.ListIsUpdate) ;
     return (
-      <View style={styles.container} >
+      <View style={styles.container}>
         {this.renderView()}
       </View>
     );

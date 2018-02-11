@@ -9,7 +9,9 @@ import {
   TextInput,
   ScrollView,
   DatePickerAndroid,
-  DatePickerIOS, TimePickerAndroid,
+  DatePickerIOS,
+  TimePickerAndroid,
+  Picker,
 } from 'react-native';
 
 import PushNotification from 'react-native-push-notification';
@@ -81,6 +83,7 @@ export default class TaskAddView extends Component<{}> {
       name: '',
       description: '',
       due: now,
+      priority: 'urgent',
       date: date,
       time: time,
     }
@@ -151,8 +154,13 @@ export default class TaskAddView extends Component<{}> {
     const created = Date.now();
 
     if (Platform.OS === 'android') {
-      date = Date.parse(this.state.date + 'T' + this.state.time);
+      console.log('add task -> android -> time');
+      console.log(this.state.date);
+      console.log(this.state.time);
+      date = Date.parse(new Date(this.state.date + 'T' + this.state.time).toUTCString());
     }
+
+    date = Math.floor(date / (60 * 1000)) * 60 * 1000;
 
     console.log(this.state.date + 'T' + this.state.time);
     console.log(date);
@@ -162,12 +170,13 @@ export default class TaskAddView extends Component<{}> {
       description: this.state.description,
       complete: false,
       due: date,
+      priority: this.state.priority,
       created: Date.now(),
     };
 
     PushNotification.localNotificationSchedule({
       userInfo: { id: `${created}` },
-      message: `Todo - ${this.state.name} arrived!`, // (required)
+      message: `Todo - ${this.state.name} is due now`, // (required)
       date: new Date(date), // in 60 secs
     });
 
@@ -225,6 +234,35 @@ export default class TaskAddView extends Component<{}> {
     );
   }
 
+  renderPicker = () => {
+
+    const list = ['urgent', 'average', 'less'];
+
+    const options = list.map((el, index) => {
+      return (
+        <Picker.Item
+          key={el}
+          value={el}
+          label={el.toUpperCase()}
+        />
+      );
+    })
+
+    return (
+      <Picker
+        selectedValue={this.state.priority}
+        onValueChange={(value) => {
+          this.setState({
+            priority: value,
+          });
+        }}
+      >
+        {options}
+      </Picker>
+    )
+
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -263,6 +301,11 @@ export default class TaskAddView extends Component<{}> {
               placeholder={'description'}
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
+          </View>
+          <View style={{
+            padding: 5
+          }}>
+            {this.renderPicker()}
           </View>
           <View style={{
             padding: 5,

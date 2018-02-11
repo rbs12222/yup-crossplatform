@@ -43,11 +43,12 @@ export default class Home extends Component {
       tintColor: '#299176',
     };
 
-    const height = Platform.OS === 'ios' ? 51 : 35;
+    const height = Platform.OS === 'ios' ? 35 : 40;
     const width = 167 / 90 * height;
-    const marginTop = 0;
+    const marginTop = Platform.OS === 'ios' ? 5: 7.5;
 
-    this.titleConfig = <Image source={require('./logo-02.png')} style={{ height, width, marginTop }} />
+    this.titleConfig = 
+      <Image source={require('./logo-02.png')} style={{ height, width, top: marginTop}} />
   }
 
   componentDidMount() {

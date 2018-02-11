@@ -103,7 +103,7 @@ export default class NoteAddView extends Component<{}> {
         />
 
         <ScrollView style={{ flex: 1 }} >
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
+          <View style={{ padding: 5, borderColor: '#299176', borderWidth: 1, margin: 10 }} >
             <TextInput
               style={{ paddingVertical: 10 }}
               value={this.state.name}
@@ -116,7 +116,7 @@ export default class NoteAddView extends Component<{}> {
               underlineColorAndroid={'rgba(0,0,0,0)'}
             />
           </View>
-          <View style={{ padding: 5, borderColor: 'blue', borderWidth: 1, margin: 10 }} >
+          <View style={{ padding: 5, borderColor: '#299176', borderWidth: 1, margin: 10 }} >
             <TextInput
               style={{ paddingVertical: 10, height: 80 }}
               value={this.state.description}

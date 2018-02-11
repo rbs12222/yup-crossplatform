@@ -70,14 +70,6 @@ export default class NoteListView extends Component<{}> {
               <Text style={{ fontSize: 17 }} > {item.name} </Text>
               <Text style={{ fontSize: 15, color: 'gray', padding: 5 }} >{item.description} </Text>
               </View>
-            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }} >
-              <Text style={{
-                fontSize: 15,
-                color: '#ff7c3d',
-                padding: 5
-              }} >
-                {NoteStore.toLocaleDateString(item.created)} </Text>
-            </View>
           </View>
           {this.renderDone(item)}
         </View>
